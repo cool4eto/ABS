@@ -11,8 +11,7 @@ namespace ABC.BLTest
         public void AirlineName_Valid()
         {
             //Arrange
-            var airline = new Airport();
-            airline.AirportName = "ABC";
+            var airline = new Airport("ABC");
             var actual = airline.AirportName;
             var expected = "ABC";
             //Act
@@ -25,8 +24,7 @@ namespace ABC.BLTest
         public void AirlineName_TooLong()
         {
             //Arrange
-            var airline = new Airport();
-            airline.AirportName = "ABCD";
+            var airline = new Airport("ABCD");
             var actual = airline.AirportName;
 
             //Act

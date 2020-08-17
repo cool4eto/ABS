@@ -3,20 +3,28 @@
 namespace ABS.BL
 {
     /// <summary>
-    /// holds information about airport
+    /// Holds information about airport.
     /// </summary>
     public class Airport
     {
-        private string airportName;
+        public Airport()
+        {
+
+        }
+        public Airport(string airportName)
+        {
+            AirportName = airportName;
+        }
+        private string _airportName;
 
         public string AirportName
         {
-            get { return airportName; }
+            get { return _airportName; }
             set 
             {
                 if (value.Length == 3)
                 {
-                    airportName = value;
+                    _airportName = value;
                 }
                 else
                 {
@@ -31,5 +39,23 @@ namespace ABS.BL
         {
             return AirportName;
         }
+        
+        // Theese overrides are for the HashSet.
+        public override bool Equals(object obj)
+        {
+            if (obj != null)
+            {
+                Airport airport = (Airport)obj;
+                return this.AirportName == airport.AirportName;
+            }
+            else return false;
+        }
+        public override int GetHashCode()
+        {
+            if (AirportName != null)
+                return AirportName.GetHashCode();
+            else return 0;
+        }
     }
+    
 }

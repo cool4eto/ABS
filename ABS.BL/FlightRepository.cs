@@ -5,22 +5,17 @@ using System.Text;
 
 namespace ABS.BL
 {
-    public static class FlightRepository
+    public class FlightRepository
     {
-        private static List<Flight> flights = new List<Flight>();
-        public static bool Save(Flight flight)
+        private HashSet<Flight> _flights = new HashSet<Flight>();
+        public bool AddNewFlight(Flight flight)
         {
-            foreach (Flight flight1 in flights)
-            {
-                if (flight.FlightId == flight1.FlightId && flight.Airline==flight1.Airline)
-                    throw new Exception("Such flight already exists");
-            }
-            flights.Add(flight);
+            _flights.Add(flight);
             return true;
         }
-        public static Flight Retreive(string flightId,Airline airline)
+        public Flight Retreive(string flightId,Airline airline)
         {
-            foreach (Flight flight in flights)
+            foreach (Flight flight in _flights)
             {
                 if (flight.FlightId == flightId&&flight.Airline.Equals(airline))
                     return flight;
@@ -28,24 +23,48 @@ namespace ABS.BL
             return null;
         }
         /// <summary>
-        /// 
-        /// retreives all flights for an airline
+        /// Retreives all flights for an airline.
         /// </summary>
         /// <param name="airline"></param>
         /// <returns></returns>
-        public static List<Flight> Retreive(Airline airline)
+        public HashSet<Flight> Retreive(Airline airline)
         {
-            List<Flight> flightsFromAirline = new List<Flight>();
-            foreach (Flight flight in flights)
+            HashSet<Flight> flightsFromAirline = new HashSet<Flight>();
+            foreach (Flight flight in _flights)
             {
                 if (flight.Airline.Equals(airline))
                     flightsFromAirline.Add(flight);
             }
             return flightsFromAirline;
         }
-        public static List<Flight> Retreive()
+        public HashSet<Flight> Retreive()
         {
-            return flights;
+            return _flights;
+        }
+
+        public string DisplayFlightsDetails()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Flight flight in _flights)
+            {
+                builder.Append(flight.ToString());
+            }
+            return builder.ToString();
+        }
+        
+        /// <summary>
+        /// Prints all flight information for airline received as parameter.
+        /// </summary>
+        /// <param name="airline"></param>
+        /// <returns></returns>
+        public string DisplayFlightDetailsForAirline(Airline airline)
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Flight flight in Retreive(airline))
+            {
+                builder.Append(flight.ToString());
+            }
+            return builder.ToString();
         }
         
     }

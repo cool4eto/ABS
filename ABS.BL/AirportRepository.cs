@@ -6,22 +6,23 @@ using System.Xml.Linq;
 namespace ABS.BL
 {
     /// <summary>
-    /// Holds repository with airports
+    /// Holds repository with airports.
     /// </summary>
-    public static class AirportRepository
+    public class AirportRepository
     {
-        private static List<Airport> airports = new List<Airport>();
-        public static bool Save(Airport a)
+        private HashSet<Airport> _airports = new HashSet<Airport>();
+        public bool AddNewAirport(Airport a)
         {
-            airports.Add(a);
+            if(!_airports.Contains(a))
+            _airports.Add(a);
             return true;
         }
         /// <summary>
-        /// retreives an airport with name from the parameter
+        /// Retreives an airport with name from the parameter.
         /// </summary>
-        public static Airport Retreive(string airportName)
+        public Airport Retreive(string airportName)
         {
-            foreach (Airport airport in airports)
+            foreach (Airport airport in _airports)
             {
                 if (airport.AirportName.Equals(airportName))
                     return airport;
@@ -29,12 +30,22 @@ namespace ABS.BL
             return null;
         }
         /// <summary>
-        /// retreives all airports
+        /// Retreives all airports.
         /// </summary>
         /// <returns></returns>
-        public static List<Airport> RetreiveAllAirports()
+        public HashSet<Airport> RetreiveAllAirports()
         {
-            return airports;
+            return _airports;
+        }
+        public string DisplayAirportsDetails()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Airport airport in _airports)
+            {
+                builder.Append(airport.ToString());
+                builder.Append("\n");
+            }
+            return builder.ToString();
         }
     }
 }

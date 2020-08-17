@@ -6,7 +6,7 @@ namespace ABS.BL
 {
 
     /// <summary>
-    /// Class mentains information about seats
+    /// Class mentains information about seats.
     /// </summary>
     class Seat
     {
@@ -16,7 +16,7 @@ namespace ABS.BL
 
         public override string ToString()
         {
-            return Column + " " + Row;
+            return Column + " " + Row+" "+Status;
         }
     }
 }

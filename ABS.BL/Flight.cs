@@ -5,7 +5,7 @@ using System.Text;
 namespace ABS.BL
 {
     /// <summary>
-    /// Contains flight information
+    /// Contains flight information.
     /// </summary>
     public class Flight
     {
@@ -37,7 +37,7 @@ namespace ABS.BL
             this.Month = month;
             this.Day = day;
         }
-        public bool addFlightSection(FlightSection sectionToAdd)
+        public bool AddFlightSection(FlightSection sectionToAdd)
         {
             foreach (FlightSection section in sections)
             {
@@ -64,35 +64,50 @@ namespace ABS.BL
             return builder.ToString();
         }
         /// <summary>
-        /// check if flight have available seats
+        /// Check if flight have available seats.
         /// </summary>
         /// <returns></returns>
         public bool hasAvailableSeats()
         {
             foreach (FlightSection section in sections)
             {
-                if (section.hasAvailableSeats()) return true;
+                if (section.HasAvailableSeats()) return true;
             }
             return false;
         }
         /// <summary>
-        /// books available seat
+        /// Books available seat.
         /// </summary>
         /// <param name="s"></param>
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        public bool bookSeat(SeatClass s,int row,char col)
+        public bool BookSeat(SeatClass s,int row,char col)
         {
             bool booked = false;
             foreach (FlightSection section in sections)
             {
                 if(section.SeatClass.Equals(s))
                 {
-                    booked = section.bookSeat(row, col);
+                    booked = section.BookSeat(row, col);
                 }
             }
             return booked;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Flight flight &&
+                   FlightId == flight.FlightId &&
+                   EqualityComparer<Airline>.Default.Equals(Airline, flight.Airline);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 2772924;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FlightId);
+            hashCode = hashCode * -1521134295 + EqualityComparer<Airline>.Default.GetHashCode(Airline);
+            return hashCode;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace ABC.BLTest
         public void invalidConstructorInput()
         {
         //Arrange
-        FlightSection flightSection = new FlightSection(SeatClass.first, 100, 100);
+        FlightSection flightSection = new FlightSection(SeatClass.First, 100, 100);
             //Act
 
             //Assert
@@ -22,7 +22,7 @@ namespace ABC.BLTest
         public void validConstructorHighInput()
         {
             //Arrange
-            FlightSection flightSection = new FlightSection(SeatClass.first, 100, 10);
+            FlightSection flightSection = new FlightSection(SeatClass.First, 100, 10);
             //Act
 
             //Assert
@@ -31,7 +31,7 @@ namespace ABC.BLTest
         public void validConstructorLowInput()
         {
             //Arrange
-            FlightSection flightSection = new FlightSection(SeatClass.first, 1, 1);
+            FlightSection flightSection = new FlightSection(SeatClass.First, 1, 1);
             //Act
 
             //Assert
@@ -40,9 +40,9 @@ namespace ABC.BLTest
         public void findAvailableSeat()
         {
             //Arrange
-            FlightSection flightSection = new FlightSection(SeatClass.first, 1, 1);
+            FlightSection flightSection = new FlightSection(SeatClass.First, 1, 1);
             //Act
-            bool actual=flightSection.hasAvailableSeats();
+            bool actual=flightSection.HasAvailableSeats();
             //Assert
             Assert.AreEqual(true, actual);
         }
@@ -50,10 +50,10 @@ namespace ABC.BLTest
         public void bookAvailableSeat()
         {
             //Arrange
-            FlightSection flightSection = new FlightSection(SeatClass.first, 1, 1);
+            FlightSection flightSection = new FlightSection(SeatClass.First, 1, 1);
             //Act
-            bool actual = flightSection.bookSeat();//books the only available seat
-            bool actual1 = flightSection.bookSeat();//tries to book non available seat
+            bool actual = flightSection.BookSeat();//books the only available seat
+            bool actual1 = flightSection.BookSeat();//tries to book non available seat
             //Assert
             Assert.AreEqual(true, actual);
             Assert.AreEqual(false, actual1);

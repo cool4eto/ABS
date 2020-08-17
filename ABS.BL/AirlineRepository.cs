@@ -5,32 +5,25 @@ using System.Text;
 namespace ABS.BL
 {
     /// <summary>
-    /// Holds repository with airlines
+    /// Holds repository with airlines.
     /// </summary>
-    public static class AirlineRepository
+    public class AirlineRepository
     {
-
-        private static List<Airline> airlines = new List<Airline>();
-        public static bool Save(Airline airlineForSaving)
+        private HashSet<Airline> _airlines = new HashSet<Airline>();
+        public  bool AddNewAirline(Airline airlineForSaving)
         {
-            foreach (Airline airline in airlines)
-            {
-                if(airline.AirlineName== airlineForSaving.AirlineName)
-                {
-                    throw new Exception("Such airline already exists");
-                }
-            }
-            airlines.Add(airlineForSaving);
+            _airlines.Add(airlineForSaving);
             return true;
-        }
+        } 
+
         /// <summary>
-        /// retreives and airline by airline name
+        /// Рetreives and airline by airline name.
         /// </summary>
         /// <param name="airlineName"></param>
         /// <returns></returns>
-        public static Airline Retreive(string airlineName)
+        public  Airline Retreive(string airlineName)
         {
-            foreach (Airline airline in airlines)
+            foreach (Airline airline in _airlines)
             {
                 if (airline.AirlineName.Equals(airlineName)) 
                     return airline;
@@ -38,12 +31,22 @@ namespace ABS.BL
             return null;
         }
         /// <summary>
-        ///Retreives all airlines
+        /// Retreives all airlines
         /// </summary>
         /// <returns></returns>
-        public static List<Airline> RetreiveAllAirlines()
+        public HashSet<Airline> RetreiveAllAirlines()
         {
-            return airlines;
+            return _airlines;
+        }
+        public string DisplayAirlinesDetails()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Airline airline in _airlines)
+            {
+                builder.Append(airline.ToString());
+                builder.Append("\n");
+            }
+            return builder.ToString();
         }
     }
 }

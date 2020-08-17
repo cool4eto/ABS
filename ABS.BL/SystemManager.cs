@@ -7,42 +7,50 @@ namespace ABS.BL
 {
     public class SystemManager
     {
-
-        public void createAirport(string n)
+        public SystemManager()
         {
-            var airport = new Airport();
-            airport.AirportName = n;
+            _airlineRepository = new AirlineRepository();
+            _airportRepository = new AirportRepository();
+            _flightRepository = new FlightRepository();
+        }
+        private AirlineRepository _airlineRepository;
+        private  AirportRepository _airportRepository;
+        private FlightRepository _flightRepository;
+        public void CreateAirport(string n)
+        {
+            var airport = new Airport(n);
             if (String.IsNullOrEmpty(airport.ValidationMessage))
             {
-                AirportRepository.Save(airport);
+                _airportRepository.AddNewAirport(airport);
             }
             else
             {
                 Console.WriteLine(airport.ValidationMessage + "Airport: " + n);
             }
         }
-        public void createAirline(string n)
+        public void CreateAirline(string n)
         {
             var airline = new Airline();
             try
             {
                 airline.AirlineName=n;
-                AirlineRepository.Save(airline);
+                _airlineRepository.AddNewAirline(airline);
 
             }catch(Exception e)
             {
-                Console.WriteLine(e.Message+" :"+n);//that formats the exception without the full description
+                // That formats the exception without the full description.
+                Console.WriteLine(e.Message+" :"+n);
             } 
         }
-        public void createFlight(string aname,string orig,string dest,int year,int month,int day,string id)
+        public void CreateFlight(string aName,string orig,string dest,int year,int month,int day,string id)
         {
-            Airline airline = AirlineRepository.Retreive(aname);
-            Airport origin = AirportRepository.Retreive(orig);
-            Airport destination = AirportRepository.Retreive(dest);
+            Airline airline = _airlineRepository.Retreive(aName);
+            Airport origin = _airportRepository.Retreive(orig);
+            Airport destination = _airportRepository.Retreive(dest);
             try
             {
                 Flight flight = new Flight(airline, origin, destination, year, month, day, id);
-                FlightRepository.Save(flight);
+                _flightRepository.AddNewFlight(flight);
             }
             catch (ArgumentNullException e)
             {
@@ -53,51 +61,47 @@ namespace ABS.BL
                 Console.WriteLine(e.Message+" "+id+" "+airline.AirlineName);
             }
         }
-        public void createSection(string aname,string flightId,int rows, int cols,SeatClass s)
+        public void CreateSection(string aName,string flightId,int rows, int cols,SeatClass s)
         {
             try
             {
-                Airline airline = AirlineRepository.Retreive(aname);
-                Flight flight = FlightRepository.Retreive(flightId, airline);
+                Airline airline = _airlineRepository.Retreive(aName);
+                Flight flight = _flightRepository.Retreive(flightId, airline);
                 FlightSection section = new FlightSection(s, rows, cols);
                 if (flight == null) throw new ArgumentNullException("Flight is not found in database");
-                flight.addFlightSection(section);
+                flight.AddFlightSection(section);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
         }
-        public void displaySystemDetails()
+        public void DisplaySystemDetails()
         {
             Console.WriteLine("List of all airports: ");
-            foreach (Airport airport in AirportRepository.RetreiveAllAirports())
-            {
-                Console.WriteLine(airport.AirportName);
-            }
+            Console.WriteLine(_airportRepository.DisplayAirportsDetails());
+            // I like this one more, because it shows the airline and the flights assigned with it.
             Console.WriteLine("List of all airlines:");
-            foreach (Airline airline in AirlineRepository.RetreiveAllAirlines())
+            foreach (Airline airline in _airlineRepository.RetreiveAllAirlines())
             {
                 Console.WriteLine(airline.AirlineName);
-                List<Flight> flights = FlightRepository.Retreive(airline);
-                foreach (Flight flight in flights)
-                {
-                    Console.WriteLine(flight.ToString());
-                }
+                Console.WriteLine(_flightRepository.DisplayFlightDetailsForAirline(airline));
             }
+
         }
-        public void findAvailableFlights(string orig,string dest)
+        public void FindAvailableFlights(string orig,string dest)
         {
             try
             {
-                Airport origin = AirportRepository.Retreive(orig);
-                Airport destination = AirportRepository.Retreive(dest);
+                Airport origin = _airportRepository.Retreive(orig);
+                Airport destination = _airportRepository.Retreive(dest);
                 if (origin == null || destination == null) throw new ArgumentNullException();
                 Console.WriteLine($"All available flights from: {orig} to: {dest} are: \n\n");
-                foreach (Flight flight in FlightRepository.Retreive())
+                foreach (Flight flight in _flightRepository.Retreive())
                 {
                     if(flight.Origin.Equals(origin)&&flight.Destination.Equals(destination)&&flight.hasAvailableSeats())
-                        Console.WriteLine(flight);//Im not sure if i have to print it or send it as list
+                        // Im not sure if i have to print it or send it as list.
+                        Console.WriteLine(flight);
                 }
             }
             catch(ArgumentNullException e)
@@ -105,14 +109,14 @@ namespace ABS.BL
                 Console.WriteLine(e.Message);
             }
         }
-        public void bookSeat(string aname, string flightId, SeatClass s, int row, char col)
+        public void BookSeat(string aName, string flightId, SeatClass s, int row, char col)
         {
             try
             {
-                Airline airline = AirlineRepository.Retreive(aname);
-                Flight flight = FlightRepository.Retreive(flightId, airline);
+                Airline airline = _airlineRepository.Retreive(aName);
+                Flight flight = _flightRepository.Retreive(flightId, airline);
                 if (airline == null || flight == null) throw new ArgumentNullException();
-                if (!flight.bookSeat(s, row, col)) throw new Exception("couldn't book");
+                if (!flight.BookSeat(s, row, col)) throw new Exception("couldn't book");
             }
             catch (Exception e)
             {

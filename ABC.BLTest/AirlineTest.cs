@@ -13,6 +13,7 @@ namespace ABC.BLTest
             //Arrange
             Airline airline = new Airline();
             airline.AirlineName="ABC";
+            Airline airline1 = new Airline("BACAAA");
             //Act
 
             //Assert
