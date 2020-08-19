@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ABS.BL
@@ -9,11 +10,14 @@ namespace ABS.BL
     /// </summary>
     public class AirlineRepository
     {
-        private HashSet<Airline> _airlines = new HashSet<Airline>();
-        public  bool AddNewAirline(Airline airlineForSaving)
+        private Dictionary<string,Airline> _airlines = new Dictionary<string, Airline>();
+        
+        public void AddNewAirline(Airline airline)
         {
-            _airlines.Add(airlineForSaving);
-            return true;
+            if (_airlines.ContainsKey(airline.Name))
+                throw new Exception(ExceptionHelper.AlreadyExistentAirline);
+
+            _airlines.Add(airline.Name,airline);
         } 
 
         /// <summary>
@@ -23,29 +27,27 @@ namespace ABS.BL
         /// <returns></returns>
         public  Airline Retreive(string airlineName)
         {
-            foreach (Airline airline in _airlines)
-            {
-                if (airline.AirlineName.Equals(airlineName)) 
-                    return airline;
-            }
-            return null;
+            if (String.IsNullOrEmpty(airlineName)) 
+                throw new Exception(ExceptionHelper.NullAirlineName);
+
+            if (!_airlines.Keys.Contains(airlineName))
+                throw new Exception(ExceptionHelper.NonExistentAirline);
+
+            return _airlines[airlineName];
         }
+
         /// <summary>
         /// Retreives all airlines
         /// </summary>
         /// <returns></returns>
-        public HashSet<Airline> RetreiveAllAirlines()
-        {
-            return _airlines;
-        }
+        public Dictionary<string,Airline> RetreiveAllAirlines() => _airlines;
+ 
         public string DisplayAirlinesDetails()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (Airline airline in _airlines)
-            {
-                builder.Append(airline.ToString());
-                builder.Append("\n");
-            }
+            foreach (Airline airline in _airlines.Values)
+                builder.Append($"{airline.ToString()}\n");
+           
             return builder.ToString();
         }
     }

@@ -11,20 +11,18 @@ namespace ABC.BLTest
         public void airlineValidName()
         {
             //Arrange
-            Airline airline = new Airline();
-            airline.AirlineName="ABC";
+
             Airline airline1 = new Airline("BACAAA");
             //Act
 
             //Assert
         }
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(Exception))]
         public void airlineInValidName()
         {
             //Arrange
-            Airline airline = new Airline();
-            airline.AirlineName = "ABCDEFG";
+            Airline airline = new Airline("ABCDEFG");
             //Act
 
             //Assert

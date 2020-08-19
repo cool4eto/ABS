@@ -40,6 +40,7 @@ namespace Program
             res.CreateFlight("AMER", "DEN", "LON", 2010, 10, 1, "123");
             res.CreateFlight("JET", "DEN", "LON", 2010, 6, 10, "786");
             res.CreateFlight("JET", "DEN", "LON", 2009, 1, 12, "909");
+            res.CreateFlight("JET", "DEN", "LON", 2009, 1, 12, "909");
 
             // Create sections.
             res.CreateSection("JET", "123", 2, 2, SeatClass.Economy);
@@ -65,7 +66,6 @@ namespace Program
 
             res.FindAvailableFlights("DEN", "LON");
             Console.ReadKey();
-            
         }
         }
 }

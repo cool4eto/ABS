@@ -10,41 +10,41 @@ namespace ABS.BL
     /// </summary>
     public class AirportRepository
     {
-        private HashSet<Airport> _airports = new HashSet<Airport>();
-        public bool AddNewAirport(Airport a)
+        private Dictionary<string,Airport> _airports = new Dictionary<string, Airport>();
+
+        public void AddNewAirport(Airport airport)
         {
-            if(!_airports.Contains(a))
-            _airports.Add(a);
-            return true;
+            if (_airports.ContainsKey(airport.Name))
+                throw new Exception(ExceptionHelper.AlreadyExistentAirport);
+
+            _airports.Add(airport.Name, airport);
         }
+
         /// <summary>
         /// Retreives an airport with name from the parameter.
         /// </summary>
         public Airport Retreive(string airportName)
         {
-            foreach (Airport airport in _airports)
-            {
-                if (airport.AirportName.Equals(airportName))
-                    return airport;
-            }
-            return null;
+            if (String.IsNullOrEmpty(airportName))
+                throw new Exception(ExceptionHelper.NullAirportName);
+            if (!_airports.ContainsKey(airportName))
+                throw new Exception(ExceptionHelper.NonExistentAirport);
+
+            return _airports[airportName];
         }
+
         /// <summary>
         /// Retreives all airports.
         /// </summary>
         /// <returns></returns>
-        public HashSet<Airport> RetreiveAllAirports()
-        {
-            return _airports;
-        }
+        public Dictionary<string,Airport> RetreiveAllAirports() => _airports;
+
         public string DisplayAirportsDetails()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (Airport airport in _airports)
-            {
-                builder.Append(airport.ToString());
-                builder.Append("\n");
-            }
+            foreach (Airport airport in _airports.Values)
+                builder.Append($"{airport.ToString()}\n");
+
             return builder.ToString();
         }
     }

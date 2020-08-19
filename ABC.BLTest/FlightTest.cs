@@ -12,12 +12,9 @@ namespace ABC.BLTest
         public void addFlightSectionTest()
         {
             //Arrange
-            Airline airline = new Airline();
-            airline.AirlineName = "ABC";
-            Airport origin = new Airport();
-            Airport destination = new Airport();
-            origin.AirportName = "HAM";
-            destination.AirportName = "DAM";
+            Airline airline = new Airline("ABC");
+            Airport origin = new Airport("HAM");
+            Airport destination = new Airport("DAM");
             Flight flight = new Flight(airline, origin, destination, 2020, 8, 13, "123");
             FlightSection section = new FlightSection(SeatClass.Business, 5, 5);
             //Act
@@ -30,12 +27,9 @@ namespace ABC.BLTest
         public void availableSeatsTest()
         {
             //Arrange
-            Airline airline = new Airline();
-            airline.AirlineName = "ABC";
-            Airport origin = new Airport();
-            Airport destination = new Airport();
-            origin.AirportName = "HAM";
-            destination.AirportName = "DAM";
+            Airline airline = new Airline("ABC");
+            Airport origin = new Airport("HAM");
+            Airport destination = new Airport("DAM");
             Flight flight = new Flight(airline, origin, destination, 2020, 8, 13, "123");
             FlightSection section = new FlightSection(SeatClass.Business, 1, 1);
             flight.AddFlightSection(section);
@@ -51,12 +45,9 @@ namespace ABC.BLTest
         public void bookingTest()
         {
             //Arrange
-            Airline airline = new Airline();
-            airline.AirlineName = "ABC";
-            Airport origin = new Airport();
-            Airport destination = new Airport();
-            origin.AirportName = "HAM";
-            destination.AirportName = "DAM";
+            Airline airline = new Airline("ABC");
+            Airport origin = new Airport("HAM");
+            Airport destination = new Airport("DAM");
             Flight flight = new Flight(airline, origin, destination, 2020, 8, 13, "123");
             FlightSection section = new FlightSection(SeatClass.Business, 1, 1);
             flight.AddFlightSection(section);

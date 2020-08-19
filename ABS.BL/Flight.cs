@@ -13,56 +13,51 @@ namespace ABS.BL
         public Airport Origin { get; set; }
         public Airport Destination { get; set; }
         public Airline Airline { get; set; }
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public int Day { get; set; }
-        public List<FlightSection> sections;
-        public Flight()
-        {
-            sections = new List<FlightSection>();
-        }
-        public Flight(Airline airline,Airport originAirport,Airport destinationAirport,int year, int month, int day,string id):this()
+        public DateTime FlightDate { get; set; }
+
+        public List<FlightSection> sections = new List<FlightSection>();
+
+        public Flight(Airline airline, Airport originAirport, Airport destinationAirport, int year, int month, int day, string id)
         {
             if (airline == null) 
-                throw new ArgumentNullException(nameof(airline));
+                throw new Exception(ExceptionHelper.NonExistentAirline);
             if(originAirport == null)
-                throw new ArgumentNullException(nameof(originAirport));
+                throw new Exception(ExceptionHelper.NonExistentAirport);
             if(destinationAirport == null)
-                throw new ArgumentNullException(nameof(destinationAirport));
+                throw new Exception(ExceptionHelper.NonExistentAirport);
             this.FlightId = id;
             this.Airline = airline;
             this.Origin = originAirport;
             this.Destination = destinationAirport;
-            this.Year = year;
-            this.Month = month;
-            this.Day = day;
+            this.FlightDate = new DateTime(year, month, day);
         }
+
         public bool AddFlightSection(FlightSection sectionToAdd)
         {
             foreach (FlightSection section in sections)
             {
                 if (sectionToAdd.SeatClass.Equals(section.SeatClass))
-                    throw new Exception("Such seatclass is already asociated with this flight");
+                    throw new Exception(ExceptionHelper.ExistingSection);
             }
             sections.Add(sectionToAdd);
             return true;
         }
+
         public override string ToString()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append($"Flight ID: {FlightId} ");
-            builder.Append($"Origin: {Origin.AirportName} ");
-            builder.Append($"Destination:  {Destination.AirportName} ");
-            builder.Append($"Airline:  {Airline.AirlineName} ");
-            builder.Append($"Date: {Day}.{Month}.{Year} ");
+            builder.Append($"Origin: {Origin.Name} ");
+            builder.Append($"Destination:  {Destination.Name} ");
+            builder.Append($"Airline:  {Airline.Name} ");
+            builder.Append($"Date: {FlightDate.Day}.{FlightDate.Month}.{FlightDate.Year} ");
             builder.Append("Seats: \n");
             foreach (FlightSection section in sections)
-            {
-                builder.Append(section.ToString());
-                builder.Append("\n");
-            }
+                builder.Append($"{section.ToString()}\n");
+
             return builder.ToString();
         }
+
         /// <summary>
         /// Check if flight have available seats.
         /// </summary>
@@ -70,11 +65,11 @@ namespace ABS.BL
         public bool hasAvailableSeats()
         {
             foreach (FlightSection section in sections)
-            {
                 if (section.HasAvailableSeats()) return true;
-            }
+
             return false;
         }
+
         /// <summary>
         /// Books available seat.
         /// </summary>
@@ -82,7 +77,7 @@ namespace ABS.BL
         /// <param name="row"></param>
         /// <param name="col"></param>
         /// <returns></returns>
-        public bool BookSeat(SeatClass s,int row,char col)
+        public bool BookSeat(SeatClass s, int row, char col)
         {
             bool booked = false;
             foreach (FlightSection section in sections)
@@ -92,22 +87,8 @@ namespace ABS.BL
                     booked = section.BookSeat(row, col);
                 }
             }
+
             return booked;
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is Flight flight &&
-                   FlightId == flight.FlightId &&
-                   EqualityComparer<Airline>.Default.Equals(Airline, flight.Airline);
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = 2772924;
-            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(FlightId);
-            hashCode = hashCode * -1521134295 + EqualityComparer<Airline>.Default.GetHashCode(Airline);
-            return hashCode;
         }
     }
 }

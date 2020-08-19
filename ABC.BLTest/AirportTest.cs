@@ -12,26 +12,25 @@ namespace ABC.BLTest
         {
             //Arrange
             var airline = new Airport("ABC");
-            var actual = airline.AirportName;
+            var actual = airline.Name;
             var expected = "ABC";
             //Act
 
             //Assert
             Assert.AreEqual(expected, actual);
-            Assert.AreEqual(null, airline.ValidationMessage);
         }
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void AirlineName_TooLong()
         {
             //Arrange
             var airline = new Airport("ABCD");
-            var actual = airline.AirportName;
+            var actual = airline.Name;
 
             //Act
 
             //Assert
             Assert.AreEqual(null, actual);
-            Assert.AreEqual("Airport Name must be 3 characters long", airline.ValidationMessage);
         }
     }
 }

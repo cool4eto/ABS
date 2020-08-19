@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace ABS.BL
 {
@@ -7,54 +8,29 @@ namespace ABS.BL
     /// </summary>
     public class Airport
     {
-        public Airport()
-        {
+        private string _name;
 
-        }
         public Airport(string airportName)
         {
-            AirportName = airportName;
+            Name = airportName;
         }
-        private string _airportName;
-
-        public string AirportName
+        
+        public string Name
         {
-            get { return _airportName; }
-            set 
+            get { return _name; }
+            set
             {
-                if (value.Length == 3)
-                {
-                    _airportName = value;
-                }
-                else
-                {
-                    ValidationMessage = "Airport Name must be 3 characters long";
-                }
+                // Matches the passed string against regex to ensure that it is exactly three upper case letters.
+                if (value.Length != 3 || !Regex.IsMatch(value, @"[A-Z]{3}"))
+                    throw new Exception(ExceptionHelper.InvalidAirportName);
+
+                _name = value;
             }
         }
-
-        public string ValidationMessage { get; private set; }
 
         public override string ToString()
         {
-            return AirportName;
-        }
-        
-        // Theese overrides are for the HashSet.
-        public override bool Equals(object obj)
-        {
-            if (obj != null)
-            {
-                Airport airport = (Airport)obj;
-                return this.AirportName == airport.AirportName;
-            }
-            else return false;
-        }
-        public override int GetHashCode()
-        {
-            if (AirportName != null)
-                return AirportName.GetHashCode();
-            else return 0;
+            return Name;
         }
     }
     

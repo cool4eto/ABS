@@ -16,7 +16,7 @@ namespace ABS.BL
 
         public override string ToString()
         {
-            return Column + " " + Row+" "+Status;
+            return Row + " " + Column+" "+Status;
         }
     }
 }

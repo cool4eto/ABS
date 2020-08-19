@@ -9,49 +9,34 @@ namespace ABS.BL
     /// </summary>
     public class Airline
     {
-        public Airline()
-        {
+        private string _name = String.Empty;
+        private FlightRepository _flightRepository = new FlightRepository();
 
+        public Airline(string name)
+        {
+            Name = name;
         }
-        public Airline(string aName)
-        {
-            AirlineName = aName;
-        }
 
-        private string _airlineName;
-
-        public string AirlineName
+        public string Name
         {
-            get { return _airlineName; }
+            get { return _name; }
             set 
             {
-                if (value.Length <= 6)
-                {
-                    _airlineName = value;
-                }
-                else throw new ArgumentOutOfRangeException();
-            }
-        }
+                if (value.Length > 6)
+                    throw new Exception(ExceptionHelper.InvalidAirlineName);
 
-        // Тheese overrides are for the HashSet.
-        public override bool Equals(object obj)
-        {
-            if (obj != null)
-            { 
-                Airline airline = (Airline)obj;
-                return this.AirlineName == airline.AirlineName;
+                _name = value;
             }
-            return false;
         }
-        public override int GetHashCode()
-        {
-            if (AirlineName != null)
-                return AirlineName.GetHashCode();
-            else return 0;
-        }
+        public FlightRepository Flights { get => _flightRepository; set => _flightRepository = value; }
+
         public override string ToString()
         {
-            return AirlineName;
+            StringBuilder builder = new StringBuilder();
+            builder.Append($"{Name}\n");
+            builder.Append(Flights.DisplayFlightsDetails());
+
+            return builder.ToString();
         }
     }
 }

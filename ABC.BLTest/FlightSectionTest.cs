@@ -8,7 +8,7 @@ namespace ABC.BLTest
     public class FlightSectionTest
     { 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [ExpectedException(typeof(Exception))]
         public void invalidConstructorInput()
         {
         //Arrange
@@ -31,7 +31,7 @@ namespace ABC.BLTest
         public void validConstructorLowInput()
         {
             //Arrange
-            FlightSection flightSection = new FlightSection(SeatClass.First, 1, 1);
+            FlightSection flightSection = new FlightSection(SeatClass.First);
             //Act
 
             //Assert
